@@ -6,27 +6,38 @@ const formSearch = document.querySelector('.form-search'),
 
 const city = ['Москва','Санкт-Перербург','Минск','Караганда','Челябинск','Керч','Волгоград','Самара','Калининград'];
 
+
+const showCity = (input,list)=>{
+    list.textContent = '';
+
+    if(input.value !== '') {
+
+        const filterCity = city.filter((item) => {
+            const fixItem = item.toLowerCase();
+            return fixItem.includes(input.value.toLowerCase());
+        });
+
+        filterCity.forEach((item) => {
+            const li = document.createElement('li');
+            li.classList.add('dropdown__city');
+            li.textContent = item;
+            list.append(li);
+        });
+    }
+
+};
+
 inputCitiesFrom.addEventListener('input',()=>{
-
-    const filterCity = city.filter((item)=>{
-        const fixItem = item.toLowerCase();
-
-        return fixItem.includes(inputCitiesFrom.value.toLowerCase());
-    });
-
-    filterCity.forEach((item)=>{
-        const li = document.createElement('li');
-        li.classList.add('dropdown__city');
-        li.textContent = item ;
-        dropdownCitiesFrom.append(li);
-        console.log(li);
-    });
+    showCity(inputCitiesFrom,dropdownCitiesFrom)
 });
 
-const get = (name) => {
-
-    console.log('вызов get:'+ name);
-};
+dropdownCitiesFrom.addEventListener('click',(event)=>{
+    const target = event.target;
+    if(target.tagName.toLowerCase() === 'li'){
+        inputCitiesFrom.value = target.textContent;
+        dropdownCitiesFrom.textContent = '';
+    }
+});
 
 
 
