@@ -11,7 +11,8 @@ const formSearch = document.querySelector('.form-search'),
 
 const citiesApi = 'dataBase/airports.json',
       proxy = 'https://cors-anywhere.herokuapp.com/',
-      API_KEY = 'd318cc44a462bb0ab1ef5ff6cac1a6c6';
+      API_KEY = 'd318cc44a462bb0ab1ef5ff6cac1a6c6',
+      calendar = 'http://min-prices.aviasales.ru/calendar_preload';
 
 let city = [];
 
