@@ -1,10 +1,18 @@
+//get information
+
 const formSearch = document.querySelector('.form-search'),
     inputCitiesFrom = formSearch.querySelector('.input__cities-from'),
     dropdownCitiesFrom = formSearch.querySelector('.dropdown__cities-from'),
-    inputCitiesTo = formSearch.querySelector('.dropdown__cities-to'),
+    inputCitiesTo = formSearch.querySelector('.input__cities-to'),
     dropdownCitiesTo = formSearch.querySelector('.dropdown__cities-to');
 
+
+//data base
 const city = ['Москва','Санкт-Перербург','Минск','Караганда','Челябинск','Керч','Волгоград','Самара','Калининград'];
+
+//functions
+
+
 
 
 const showCity = (input,list)=>{
@@ -27,16 +35,31 @@ const showCity = (input,list)=>{
 
 };
 
+const selectCity = (event,input,list)=>{
+    const target = event.target;
+    if(target.tagName.toLowerCase() === 'li'){
+        input.value = target.textContent;
+        list.textContent = '';
+    }
+};
+
+
+
+//events
+
 inputCitiesFrom.addEventListener('input',()=>{
     showCity(inputCitiesFrom,dropdownCitiesFrom)
 });
 
-dropdownCitiesFrom.addEventListener('click',(event)=>{
-    const target = event.target;
-    if(target.tagName.toLowerCase() === 'li'){
-        inputCitiesFrom.value = target.textContent;
-        dropdownCitiesFrom.textContent = '';
-    }
+inputCitiesTo.addEventListener('input',()=>{
+    showCity(inputCitiesTo,dropdownCitiesTo)
+});
+
+dropdownCitiesFrom.addEventListener('click',(event)=> {
+    selectCity(event,inputCitiesFrom,dropdownCitiesFrom);
+});
+dropdownCitiesTo.addEventListener('click',(event)=>{
+   selectCity(event,inputCitiesTo,dropdownCitiesTo);
 });
 
 
