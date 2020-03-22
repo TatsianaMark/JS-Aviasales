@@ -7,28 +7,50 @@ const formSearch = document.querySelector('.form-search'),
     dropdownCitiesTo = formSearch.querySelector('.dropdown__cities-to');
 
 
-//data base
-const city = ['Москва','Санкт-Перербург','Минск','Караганда','Челябинск','Керч','Волгоград','Самара','Калининград'];
+//data
+
+const citiesApi = 'dataBase/airports.json',
+      proxy = 'https://cors-anywhere.herokuapp.com/';
+
+let city = [];
 
 //functions
 
+const getData = (url, callback) =>{
+    const request = new XMLHttpRequest();
+
+    request.open('GET',url);
+
+    request.addEventListener('readystatechange',()=>{
+        if (request.readyState !== 4) return;
+
+        if(request.status === 200){
+            callback(request.response);
+        } else {
+            console.error(request.status);
+        }
+    });
+
+    request.send();
 
 
+};
 
 const showCity = (input,list)=>{
     list.textContent = '';
 
     if(input.value !== '') {
-
         const filterCity = city.filter((item) => {
-            const fixItem = item.toLowerCase();
-            return fixItem.includes(input.value.toLowerCase());
+            if (item.name){
+                const fixItem = item.name.toLowerCase();
+                return fixItem.includes(input.value.toLowerCase());
+            }
         });
 
         filterCity.forEach((item) => {
             const li = document.createElement('li');
             li.classList.add('dropdown__city');
-            li.textContent = item;
+            li.textContent = item.name;
             list.append(li);
         });
     }
@@ -63,7 +85,10 @@ dropdownCitiesTo.addEventListener('click',(event)=>{
 });
 
 
+//Calls function
 
+getData(citiesApi,(data)=>{
+    city  = JSON.parse(data);
 
-
+});
 
