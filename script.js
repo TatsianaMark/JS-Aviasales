@@ -10,7 +10,8 @@ const formSearch = document.querySelector('.form-search'),
 //data
 
 const citiesApi = 'dataBase/airports.json',
-      proxy = 'https://cors-anywhere.herokuapp.com/';
+      proxy = 'https://cors-anywhere.herokuapp.com/',
+      API_KEY = 'd318cc44a462bb0ab1ef5ff6cac1a6c6';
 
 let city = [];
 
@@ -41,10 +42,9 @@ const showCity = (input,list)=>{
 
     if(input.value !== '') {
         const filterCity = city.filter((item) => {
-            if (item.name){
                 const fixItem = item.name.toLowerCase();
                 return fixItem.includes(input.value.toLowerCase());
-            }
+
         });
 
         filterCity.forEach((item) => {
@@ -88,7 +88,13 @@ dropdownCitiesTo.addEventListener('click',(event)=>{
 //Calls function
 
 getData(citiesApi,(data)=>{
-    city  = JSON.parse(data);
-
+    city  = JSON.parse(data).filter(item => item.name)
 });
 
+/*
+
+(item) => {
+return item.name
+}
+
+ */
