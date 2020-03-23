@@ -4,7 +4,8 @@ const formSearch = document.querySelector('.form-search'),
     inputCitiesFrom = formSearch.querySelector('.input__cities-from'),
     dropdownCitiesFrom = formSearch.querySelector('.dropdown__cities-from'),
     inputCitiesTo = formSearch.querySelector('.input__cities-to'),
-    dropdownCitiesTo = formSearch.querySelector('.dropdown__cities-to');
+    dropdownCitiesTo = formSearch.querySelector('.dropdown__cities-to'),
+    inputDateDepart = formSearch.querySelector('.input__date-depart');
 
 
 //data
@@ -87,14 +88,32 @@ dropdownCitiesTo.addEventListener('click',(event) => {
 
 
 formSearch.addEventListener('submit',(event) => {
-   event.preventDefault();
-   
-});
+    event.preventDefault();
 
+   const cityFrom = city.find((item) => {
+       return inputCitiesFrom.value === item.name
+   });
+   const cityTo = city.find((item) => {
+       return inputCitiesTo.value === item.name
+   });
+
+   const formData = {
+       from: cityFrom.code,
+       to: cityTo.code,
+       when: inputDateDepart.value,
+   };
+
+   const requestData = '?depart_date=' + formData.when +
+       '&origin=' + formData.from +
+       '&destination=' + formData.to +
+       '&one_way=true&token=' + API_KEY;
+   
+
+});
 //Calls function
 
-getData(citiesApi,(data)=>{
-    city  = JSON.parse(data).filter(item => item.name);
+getData(citiesApi,(data) => {
+    city = JSON.parse(data).filter(item => item.name)
 });
 
 /*
