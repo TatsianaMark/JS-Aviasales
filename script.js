@@ -70,26 +70,31 @@ const selectCity = (event,input,list)=>{
 
 //events
 
-inputCitiesFrom.addEventListener('input',()=>{
+inputCitiesFrom.addEventListener('input',() => {
     showCity(inputCitiesFrom,dropdownCitiesFrom)
 });
 
-inputCitiesTo.addEventListener('input',()=>{
+inputCitiesTo.addEventListener('input',() => {
     showCity(inputCitiesTo,dropdownCitiesTo)
 });
 
-dropdownCitiesFrom.addEventListener('click',(event)=> {
+dropdownCitiesFrom.addEventListener('click',(event) => {
     selectCity(event,inputCitiesFrom,dropdownCitiesFrom);
 });
-dropdownCitiesTo.addEventListener('click',(event)=>{
+dropdownCitiesTo.addEventListener('click',(event) => {
    selectCity(event,inputCitiesTo,dropdownCitiesTo);
 });
 
 
+formSearch.addEventListener('submit',(event) => {
+   event.preventDefault();
+   
+});
+
 //Calls function
 
 getData(citiesApi,(data)=>{
-    city  = JSON.parse(data).filter(item => item.name)
+    city  = JSON.parse(data).filter(item => item.name);
 });
 
 /*
@@ -99,3 +104,30 @@ return item.name
 }
 
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
