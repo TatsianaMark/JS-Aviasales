@@ -15,7 +15,8 @@ const formSearch = document.querySelector('.form-search'),
 const citiesApi = 'http://api.travelpayouts.com/data/ru/cities.json',
       proxy = 'https://cors-anywhere.herokuapp.com/',
       API_KEY = 'd318cc44a462bb0ab1ef5ff6cac1a6c6',
-      calendar = 'http://min-prices.aviasales.ru/calendar_preload';
+      calendar = 'http://min-prices.aviasales.ru/calendar_preload',
+      MAX_COUNT = 10;
 
 let city = [];
 
@@ -68,12 +69,49 @@ const selectCity = (event,input,list) => {
     }
 };
 
-const getChanges = (num) => {
-  if (num)   {
-      return num === 1 ? 'С одной пересадкой': ' С двумя пересадками';
+const getNameCity = (code) => {
+  const objCity = city.find((item) => item.code === code);
+  return objCity.name;
+};
+
+const getDate = (date) => {
+    return new Date (date).toLocaleString('ru',{
+        year:'numeric',
+        month:'long',
+        day:'numeric',
+        hour:'2-digit',
+        minute:'2-digit',
+    });
+};
+
+const getChanges = (n) => {
+  if (n)   {
+      return n === 1 ? 'С одной пересадкой': ' С двумя пересадками';
   } else {
       return 'Без пересадок'
   }
+};
+
+const getLinkAviasales = (data) => {
+    let link = 'https://www.aviasales.ru/search/';
+
+    link += data.origin;
+
+    const date = new Date(data.depart_date);
+
+    const day = date.getDate();
+
+    link += day < 10 ? '0' + day : day;
+
+    const month = date.getMonth()+1;
+
+    link += month < 10 ? '0' + month : month;
+
+    link += data.destination;
+
+    link += '1';
+
+        return link;
 };
 
 const createCard = (data) => {
@@ -87,21 +125,21 @@ const createCard = (data) => {
                <h3 class="agent">${data.gate}</h3>
                 <div class="ticket__wrapper">
                     <div class="left-side">
-                        <a href="https://www.aviasales.ru/search/SVX2905KGD1" class="button button__buy">Купить
-                            за {data.value}}₽</a>
+                        <a href="${getLinkAviasales(data)}" target="_blank" class="button button__buy">Купить
+                            за ${data.value}₽</a>
                     </div>
                     <div class="right-side">
                         <div class="block-left">
                             <div class="city__from">Вылет из города
-                                <span class="city__name">${data.origin}</span>
+                                <span class="city__name">${getNameCity(data.origin)}</span>
                             </div>
-                            <div class="date">${data.depart_date}</div>
+                            <div class="date">${getDate(data.depart_date)}</div>
                         </div>
                 
                         <div class="block-right">
                             <div class="changes">${getChanges(data.number_of_changes)}</div>
                             <div class="city__to">Город назначения:
-                                <span class="city__name">${data.destination}</span>
+                                <span class="city__name">${getNameCity(data.destination)}</span>
                             </div>
                         </div>
                     </div>
@@ -119,14 +157,23 @@ const createCard = (data) => {
 };
 
 const renderCheapDay = (cheapTicket) => {
+    cheapestTicket.style.display = 'block';
+    cheapestTicket.innerHTML = '<h2>Самый дешевый билет на выбранную дату</h2>';
+
     const ticket = createCard(cheapTicket[0]);
     cheapestTicket.append(ticket);
 };
 
 const renderCheapYear = (cheapTickets) => {
+    otherCheapTickets.style.display = 'block';
+    otherCheapTickets.innerHTML = '<h2>Самые дешевые билеты на другие даты</h2>';
     //not for string
     cheapTickets.sort((a, b) => a.value - b.value);
 
+    for(let i = 0; i < cheapTickets.length && i < MAX_COUNT; i++){
+        const ticket = createCard(cheapTickets[i]);
+        otherCheapTickets.append(ticket);
+    }
     // you can sort number,string
     // cheapTickets.sort((a, b) => {
     //     if (a.value > b.value) {
@@ -144,8 +191,6 @@ const renderCheapYear = (cheapTickets) => {
 
 const renderCheap = (data,date) => {
     const cheapTicketYear = JSON.parse(data).best_prices;
-
-
 
     const cheapTicketDay = cheapTicketYear.filter((item) => {
         return item.depart_date === date;
