@@ -22,7 +22,7 @@ let city = [];
 
 //functions
 
-const getData = (url, callback) =>{
+const getData = (url, callback,reject = console.error) =>{
     const request = new XMLHttpRequest();
 
     request.open('GET',url);
@@ -33,11 +33,11 @@ const getData = (url, callback) =>{
         if (request.status === 200){
             callback(request.response);
         } else {
-            console.error(request.status);//здесь ругается
+            reject(request.status);
         }
     });
 
-    request.send(); // и здесь:)
+    request.send();
 
 
 };
@@ -245,8 +245,10 @@ formSearch.addEventListener('submit',(event) => {
 
             getData(calendar + requestData, (data) => {
                 renderCheap(data, formData.when);
-
-        });
+            },error => {
+                alert (' В этом направлении нет рейсов');
+                console.error('Ошибка',error)
+            });
     } else {
         alert('Enter the correct city name!');
     }
@@ -266,7 +268,7 @@ formSearch.addEventListener('submit',(event) => {
                 return 0;
             });
         console.log(city);
-    });
+    },);
 
 
 /*
