@@ -185,7 +185,6 @@ const renderCheapYear = (cheapTickets) => {
     //     // a должно быть равным b
     //     return 0;
     // });
-    console.log(cheapTickets);
 };
 
 
@@ -267,7 +266,6 @@ formSearch.addEventListener('submit',(event) => {
                 }
                 return 0;
             });
-        console.log(city);
     },);
 
 
